@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fahd El Haloui - Cloud Engineer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --dark: #0a0a0a;
+            --light: #fafafa;
+            --gray: #737373;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* Cursor follower */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .hero-label {
+            font-size: 0.875rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        h1 {
+            font-size: 5rem;
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.2s forwards;
+        }
+
+        h1 strong {
+            font-weight: 600;
+            display: block;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.4s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--dark);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: var(--dark);
+            border: 1px solid var(--dark);
+        }
+
+        .cta-secondary::before {
+            background: var(--dark);
+        }
+
+        .cta-secondary:hover {
+            color: white;
+        }
+
+        /* Scroll Progress */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav li {
+            margin: 20px 0;
+            text-align: right;
+        }
+
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 1px;
+            background: var(--gray);
+            transition: all 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            background: var(--primary);
+            width: 40px;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 120px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            width: 100%;
+        }
+
+        .section-number {
+            font-size: 0.875rem;
+            color: var(--primary);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+        }
+
+        /* Experience Cards */
+        .experience-item {
+            margin-bottom: 80px;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+        }
+
+        .experience-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .exp-date {
+            font-size: 0.875rem;
+            color: var(--gray);
+            letter-spacing: 1px;
+        }
+
+        .exp-content h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .exp-company {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .exp-content ul {
+            list-style: none;
+            color: var(--gray);
+        }
+
+        .exp-content li {
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .exp-content li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .project-card {
+            padding: 40px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .project-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .project-tech {
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .project-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* Skills */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+        }
+
+        .skill-group h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .skill-group ul {
+            list-style: none;
+        }
+
+        .skill-group li {
+            color: var(--gray);
+            padding: 8px 0;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .skill-group li:hover {
+            color: var(--primary);
+            padding-left: 10px;
+        }
+
+        /* Contact Section */
+        #contact {
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .contact-links a:hover {
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .experience-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <nav>
+        <ul>
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#experience" class="nav-link">Experience</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header id="home">
+            <div class="hero-content">
+                <div class="hero-label">Cloud Engineer</div>
+                <h1>
+                    Hi, I'm <strong>Fahd El Haloui</strong>
+                </h1>
+                <p class="hero-description">
+                    5th-year cloud computing student from Rabat, passionate about building scalable infrastructure and automating everything. I specialize in DevOps practices, cloud architecture, and crafting full-stack solutions that make a difference.
+                </p>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <a href="#contact" class="cta-button">Get In Touch</a>
+                    <a href="#" class="cta-button cta-secondary" onclick="downloadCV(event)">Download CV</a>
+                </div>
+            </div>
+        </header>
+
+        <section id="experience">
+            <div class="section-content">
+                <div class="section-number">01</div>
+                <h2>Experience</h2>
+
+                <div class="experience-item">
+                    <div class="exp-date">Jul – Sep 2025</div>
+                    <div class="exp-content">
+                        <h3>Software Engineer Intern</h3>
+                        <div class="exp-company">CDG Capital</div>
+                        <ul>
+                            <li>Developed full-stack web app for managing soultes with Excel integration</li>
+                            <li>Implemented role-based access control and optimized database queries</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="exp-date">Jul 2024</div>
+                    <div class="exp-content">
+                        <h3>DevOps Engineer Intern</h3>
+                        <div class="exp-company">Moussahamati</div>
+                        <ul>
+                            <li>Automated deployment pipelines using Docker and Selenium</li>
+                            <li>Assisted in CI/CD setup and containerization workflows</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="experience-item">
+                    <div class="exp-date">Jul 2023</div>
+                    <div class="exp-content">
+                        <h3>Software Engineer Intern</h3>
+                        <div class="exp-company">SLAMTEC</div>
+                        <ul>
+                            <li>Designed responsive web interface with GPS mapping integration</li>
+                            <li>Optimized system architecture for enhanced performance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-content">
+                <div class="section-number">02</div>
+                <h2>Selected Projects</h2>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-icon">🤖</div>
+                        <h3>Ultron AI Assistant</h3>
+                        <div class="project-tech">Python • Speech Recognition</div>
+                        <p>Voice-controlled AI assistant inspired by Iron Man's Jarvis, featuring task automation and contextual responses.</p>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-icon">🔐</div>
+                        <h3>Smart Check-Up IoT</h3>
+                        <div class="project-tech">Arduino • Node-RED • MariaDB</div>
+                        <p>IoT-based attendance system with RFID authentication and real-time access control dashboard.</p>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-icon">🎵</div>
+                        <h3>Mood Music App</h3>
+                        <div class="project-tech">Azure • Flask • Gemini API</div>
+                        <p>Emotion-based music recommendation system using cloud services and AI processing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="section-content">
+                <div class="section-number">03</div>
+                <h2>Skills & Tools</h2>
+
+                <div class="skills-container">
+                    <div class="skill-group">
+                        <h3>Languages</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>JavaScript</li>
+                            <li>Java</li>
+                            <li>C / C++</li>
+                            <li>SQL</li>
+                            <li>Shell</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-group">
+                        <h3>Cloud & DevOps</h3>
+                        <ul>
+                            <li>Azure</li>
+                            <li>AWS</li>
+                            <li>Docker</li>
+                            <li>OpenStack</li>
+                            <li>Kafka</li>
+                            <li>Git</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-group">
+                        <h3>Technologies</h3>
+                        <ul>
+                            <li>Node.js</li>
+                            <li>Flask</li>
+                            <li>MongoDB</li>
+                            <li>Neo4j</li>
+                            <li>Elasticsearch</li>
+                            <li>Hadoop</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="section-content">
+                <div class="section-number">04</div>
+                <h2>Let's Connect</h2>
+                <p class="hero-description" style="margin: 0 auto;">
+                    I'm currently open to new opportunities and interesting projects. Feel free to reach out.
+                </p>
+                <div class="contact-links">
+                    <a href="mailto:fahd.elhaloui@uir.ac.ma">Email</a>
+                    <a href="https://linkedin.com/in/fahd-elhaloui" target="_blank">LinkedIn</a>
+                    <a href="https://github.com/Helva-7" target="_blank">GitHub</a>
+                    <a href="tel:+212607449717">Phone</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Designed & Built by Fahd El Haloui</p>
+    </footer>
+
+    <script>
+        // Cursor follower
+        const cursorDot = document.getElementById('cursorDot');
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // Scroll progress
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.experience-item, .project-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Active nav link on scroll
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Download CV function
+        function downloadCV(e) {
+            e.preventDefault();
+            
+            // Replace 'your-cv-file.pdf' with the actual path to your PDF file
+            // You can upload your PDF to a cloud storage service and use that URL
+            // Or place it in the same directory as your website
+            const pdfUrl = 'EL_HALOUI_FAHD_RESUME-4.pdf';
+            
+            // Create a temporary link and trigger download
+            const a = document.createElement('a');
+            a.href = pdfUrl;
+            a.download = 'Fahd_El_Haloui_CV.pdf';
+            a.target = '_blank'; // Opens in new tab as fallback
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
